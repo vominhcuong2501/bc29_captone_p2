@@ -75,6 +75,7 @@ function deleteProduct(id) {
  * Nhấn nút thêm mới
  */
 getEle("btnThemSP").onclick = function () {
+  getEle("Ten").disabled = false;
   // đổi tên tiêu đề
   document.getElementsByClassName("modal-title")[0].innerHTML =
     "Thêm sản phẩm";
