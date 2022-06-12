@@ -8,6 +8,7 @@ function getEle(id) {
 
 function resetValue() {
   getEle("Ten").value = "";
+  getEle("Loai").value = "";
   getEle("Gia").value = "";
   getEle("HinhAnh").value = "";
   getEle("MoTa").value = "";
@@ -18,7 +19,6 @@ function getData(data) {
     arrayProduct.push(ele);
   });
 }
-
 // Lấy danh sách từ server về
 function getListProduct() {
   service
@@ -40,6 +40,7 @@ function renderListProduct(data) {
         <tr>
             <td>${index + 1}</td>
             <td>${product.ten}</td>
+            <td>${product.loai}</td>
             <td>$${product.gia}</td>
             <td><img src="./../../assets/img/${product.hinhAnh}" style="width: 30%" alt=""></td>
             <td><a href= "#">${product.moTa}</a></td>
@@ -119,6 +120,7 @@ function editProduct(id) {
     .getProductById(id)
     .then(function (result) {
       getEle("Ten").value = result.data.ten;
+      getEle("Loai").value = result.data.loai;
       getEle("Gia").value = result.data.gia;
       getEle("HinhAnh").value = result.data.hinhAnh;
       getEle("MoTa").value = result.data.moTa;
@@ -153,6 +155,7 @@ function validProduct(isAdd, isEdit, id) {
   // đặt biến isAdd xét TK, true ở thêm, false ở update.
   var id = isEdit ? id : "";
   var ten = getEle("Ten").value;
+  var loai = getEle("Loai").value;
   var gia = getEle("Gia").value;
   var hinhAnh = getEle("HinhAnh").value;
   var moTa = getEle("MoTa").value;
@@ -160,6 +163,7 @@ function validProduct(isAdd, isEdit, id) {
   var product = new Products(
     id,
     ten,
+    loai,
     gia,
     hinhAnh,
     moTa
@@ -182,7 +186,10 @@ function validProduct(isAdd, isEdit, id) {
     );
   }
 
-  isValid &= validation.kiemTraRong(gia, "errorGia", "*Vui lòng nhập giá sản phẩm") && validation.kiemTraKieuDL(gia, number, "errorGia", "*Vui lòng nhập số")
+  isValid &=
+    validation.kiemTraRong(loai, "errorLoai", "*Vui lòng nhập loại sản phẩm")
+
+  isValid &= validation.kiemTraRong(gia, "errorGia", "*Vui lòng nhập giá sản phẩm") && validation.kiemTraKieuDL(gia, number, "errorGia", "*Vui lòng nhập số");
 
   isValid &= validation.kiemTraRong(
     hinhAnh,
@@ -204,3 +211,23 @@ function validProduct(isAdd, isEdit, id) {
   if (!isValid) {return  null};
   return product;
 }
+
+function timKiemSP(keyword) {
+  var mangTimKiem = [];
+  arrayProduct.forEach(function(item) {
+      if(item.ten.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+          mangTimKiem.push(item);
+      }
+  });
+  return mangTimKiem;
+};
+
+/**
+ * Tìm kiếm SP
+ */
+ getEle("keyword").addEventListener("keyup",function() {
+  var keyword = getEle("keyword").value;
+  var mangTimKiem = timKiemSP(keyword);
+  renderListProduct(mangTimKiem);
+})
+
