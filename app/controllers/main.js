@@ -215,7 +215,7 @@ function validProduct(isAdd, isEdit, id) {
 function timKiemSP(keyword) {
   var mangTimKiem = [];
   arrayProduct.forEach(function(item) {
-      if(item.ten.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+      if(item.loai.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
           mangTimKiem.push(item);
       }
   });
